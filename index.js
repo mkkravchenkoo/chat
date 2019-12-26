@@ -13,20 +13,16 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.get('/', (req, res) => res.send('Server is working'))
+app.use(express.json({extended:false}));
 
+app.use('/users', require('./routes/user'));
+app.get('/', (req, res) => res.send('Server is working'));
 
 const start = async () => {
 	try {
-		const rr = await mongoose.connect( process.env.MONGO_URI, {useNewUrlParser: true});
+		await mongoose.connect( process.env.MONGO_URI, {useNewUrlParser: true});
 
 		app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-
-		app.get('/users', async (req, res) => {
-			const result = await rr.connection.db.collection('users').find().toArray();
-			res.json(result)
-		})
 
 	}catch (e) {
 		console.log(e.message);
