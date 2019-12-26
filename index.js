@@ -6,6 +6,12 @@ const port = process.env.PORT || 3001
 const dotenv = require('dotenv');
 dotenv.config({path:'./config/config.env'});
 
+app.use(function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
+	res.header("Access-Control-Allow-Headers", "Content-Type");
+	next();
+});
 
 app.get('/', (req, res) => res.send('Server is working'))
 
