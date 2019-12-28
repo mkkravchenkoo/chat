@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 		if(!user){
 			return res
 				.status(400)
-				.json('Invalid credentials!')
+				.send('Invalid credentials!')
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password);
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 		if(!isMatch){
 			return res
 				.status(400)
-				.json('Invalid credentials!')
+				.send('Invalid credentials!')
 		}
 
 		jwt.sign(

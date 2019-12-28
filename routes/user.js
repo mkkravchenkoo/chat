@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 	}
 });
 
-// GET /users
+// GET /users/me
 // get logged user
 router.get('/me', auth, async (req, res) => {
 	try {

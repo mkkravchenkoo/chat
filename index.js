@@ -19,6 +19,7 @@ app.use(express.json({extended:false}));
 
 app.use('/users', require('./routes/user'));
 app.use('/auth', require('./routes/auth'));
+app.use('/messages', require('./routes/message'));
 app.get('/', (req, res) => res.send('Server is working'));
 
 const start = async () => {
