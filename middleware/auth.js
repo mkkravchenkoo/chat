@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
 
 	//check if no token
 	if(!token){
-		return res.status(401).json({msg:'No token!!!'})
+		return res.status(401).send('Not authorized')
 	}
 
 	// verify token
@@ -23,7 +23,7 @@ module.exports = function (req, res, next) {
 		next();
 
 	}catch (e) {
-		return res.status(401).json({msg:'Token is not valid!!!'})
+		return res.status(401).send('Token is not valid!')
 	}
 
 }

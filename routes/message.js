@@ -14,10 +14,12 @@ router.get('/', async (req, res) => {
 	const currentPage = page > 0 ? page - 1 : 0;
 
 	try {
-		const messages = Message.find({}).limit(size).skip(currentPage * size);
+		const messages = Message.find({}).sort('-date').limit(size).skip(currentPage * size).populate('user', 'email');
 		return res.json({
-			messages:await messages,
-			total:await Message.find({}).countDocuments()
+			items:await messages,
+			total:await Message.find({}).countDocuments(),
+			page:page || 1,
+			size
 		});
 	}catch (e) {
 		console.log(e);
