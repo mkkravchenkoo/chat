@@ -50,6 +50,10 @@ const start = async () => {
 				io.sockets.emit('online users', {online:loggedUsers})
 			});
 
+			socket.on('message add', function(message){
+				io.sockets.emit('new message', {message, socketId:socket.id})
+			});
+
 		});
 
 

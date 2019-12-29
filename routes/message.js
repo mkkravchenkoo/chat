@@ -10,16 +10,13 @@ const Message = require('../models/Message');
 // get all messages
 router.get('/', async (req, res) => {
 	const size = 10;
-	const page = parseInt(req.query.page);
-	const currentPage = page > 0 ? page - 1 : 0;
+	const skip = parseInt(req.query.skip);
 
 	try {
-		const messages = Message.find({}).sort('-date').limit(size).skip(currentPage * size).populate('user', 'email');
+		const messages = Message.find({}).sort('-date').limit(size).skip(skip).populate('user', 'email');
 		return res.json({
 			items:await messages,
 			total:await Message.find({}).countDocuments(),
-			page:page || 1,
-			size
 		});
 	}catch (e) {
 		console.log(e);
@@ -40,6 +37,7 @@ router.post('/', auth, async (req, res) => {
 
 		try {
 			const savedMessage = await userMessage.save();
+			await Message.populate(savedMessage, {path:"user", select:"email"});
 			return res.json({
 				message: savedMessage
 			});
