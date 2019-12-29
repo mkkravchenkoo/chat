@@ -26,7 +26,32 @@ const start = async () => {
 	try {
 		await mongoose.connect( process.env.MONGO_URI, {useNewUrlParser: true});
 
-		app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+		let server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+		let io = require('socket.io')(server);
+		let loggedUsers = [];
+
+		io.sockets.on('connection', function(socket){
+
+			socket.on('disconnect', function(data){
+
+				loggedUsers = loggedUsers.filter((item) => item.socketId !== socket.id);
+				io.sockets.emit('online users', {online:loggedUsers})
+			});
+
+			socket.on('online user', function(userId){
+				// loggedUsers
+				loggedUsers.push({socketId:socket.id, userId:userId});
+				io.sockets.emit('online users', {online:loggedUsers})
+			});
+
+			socket.on('user logout', function(userId){
+				loggedUsers = loggedUsers.filter((item) => item.userId !== userId);
+				io.sockets.emit('online users', {online:loggedUsers})
+			});
+
+		});
+
 
 	}catch (e) {
 		console.log(e.message);
